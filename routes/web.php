@@ -25,4 +25,5 @@ Route::controller(HomeController::class)
         Route::get('/',  'index')->name('home');
         Route::get('/inscritos','registro');
         Route::get('/pagado','pago1');
+        Route::post('/registrar','pago2')->name('liberar');
     });

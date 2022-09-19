@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+
 use App\Models\Registro;
 use App\Models\Escuela;
+use App\Models\Referencia;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -50,6 +52,19 @@ class HomeController extends Controller
         return view('pagos.liberar1');
     }
     public function pago2(Request $request){
-
+        request()->validate([
+            'referencia'=>'required|size:10'
+        ],[
+            'referencia.required'=>'Debe indicar el número de referencia',
+            'referencia.size'=>'La longitud de la línea de referencia es de 10 dígitos'
+        ]);
+        $linea=$request->get('referencia');
+        Referencia::findOrfail($linea);
+        //Se indican los datos de la persona
+        $id_registro=Referencia::where('referencia',$linea)->first();
+        $persona=Registro::where('id',$id_registro->registro)->first();
+        $institucion=Escuela::where('id',$persona->tec)->first();
+        return view('pagos.liberar2')->with(compact('persona',
+            'id_registro','institucion'));
     }
 }

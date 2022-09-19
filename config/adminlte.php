@@ -293,7 +293,7 @@ return [
         // Sidebar items:
         ['header' => 'Informes'],
         [
-            'text' => 'Registros',
+            'text' => 'Estadística',
             'url'  => '/home/inscritos',
             'icon' => 'fas fa-fw fa-user',
         ],
