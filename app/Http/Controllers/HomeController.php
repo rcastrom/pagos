@@ -30,6 +30,10 @@ class HomeController extends Controller
     {
         return view('pagos.inicio');
     }
+    public function datos_persona($id_registro){
+        $data=DB::select("CALL datos_persona('$id_registro');");
+        return $data;
+    }
     public function registro(){
        $registros_pagados=Escuela::select('escuelas.tec',DB::raw('count(registros.id) as registrados'))
            ->leftJoin('registros','escuelas.id','=','registros.tec')
@@ -48,23 +52,78 @@ class HomeController extends Controller
        return view('pagos.registros')->with(compact('registros_pagados',
            'registros_sin_pagar'));
     }
-    public function pago1(){
-        return view('pagos.liberar1');
+    public function buscar(){
+        return view('pagos.buscar');
+    }
+    public function busqueda(Request $request){
+        request()->validate([
+            'dato'=>'required'
+        ],[
+            'dato.required'=>'Debe indicar algún apellido para llevar a cabo la búsqueda',
+        ]);
+        $dato=$request->get('dato');
+        $personas = Registro::select('registros.id','appat','apmat','nombre','escuelas.tec','escuelas.ciudad')->
+            join('escuelas','registros.tec','escuelas.id')->
+            where('appat',strtoupper($dato))->
+            orWhere('apmat',strtoupper($dato))->
+            orWhere('nombre',strtoupper($dato))->
+            orderBy('ciudad')->
+            orderBy('appat')->
+            orderBy('apmat')->
+            orderBy('nombre')->
+            get();
+        return view('pagos.buscar2')->with(compact('personas'));
+    }
+    public function eliminar1($control1){
+        $id_persona=base64_decode($control1);
+        if(Referencia::where('registro',$id_persona)->count()>0){
+            $persona = $this->datos_persona($id_persona);
+            return view('pagos.eliminar2')->with(compact('persona'));
+        }else{
+            Registro::where('id',$id_persona)->delete();
+            return view('pagos.error');
+        }
+    }
+    public function pago1($control1){
+        $id_persona=base64_decode($control1);
+        if(Referencia::where('registro',$id_persona)->count()>0){
+            $persona = $this->datos_persona($id_persona);
+            return view('pagos.liberar2')->with(compact('persona'));
+        }else{
+            Registro::where('id',$id_persona)->delete();
+            return view('pagos.error');
+        }
+    }
+    public function imprimir1($control1){
+        $id_persona=base64_decode($control1);
+        if(Referencia::where('registro',$id_persona)->count()>0){
+            $persona = $this->datos_persona($id_persona);
+            return view('pagos.imprimir2')->with(compact('persona'));
+        }else{
+            Registro::where('id',$id_persona)->delete();
+            return view('pagos.error');
+        }
     }
     public function pago2(Request $request){
-        request()->validate([
-            'referencia'=>'required|size:10'
-        ],[
-            'referencia.required'=>'Debe indicar el número de referencia',
-            'referencia.size'=>'La longitud de la línea de referencia es de 10 dígitos'
-        ]);
-        $linea=$request->get('referencia');
-        Referencia::findOrfail($linea);
-        //Se indican los datos de la persona
-        $id_registro=Referencia::where('referencia',$linea)->first();
-        $persona=Registro::where('id',$id_registro->registro)->first();
-        $institucion=Escuela::where('id',$persona->tec)->first();
-        return view('pagos.liberar2')->with(compact('persona',
-            'id_registro','institucion'));
+        $linea=base64_decode($request->get('referencia'));
+        $liberar=$request->get('continuar');
+        if($liberar){
+            $id_registro=Referencia::where('referencia',$linea)->first();
+            Registro::where('id',$id_registro->registro)->update([
+                'pagado'=>1
+            ]);
+            return view('pagos.liberado');
+        }
+        return view('pagos.inicio');
+    }
+    public function eliminar2(Request $request){
+        $linea=base64_decode($request->get('referencia'));
+        $liberar=$request->get('continuar');
+        if($liberar){
+            $id_registro=Referencia::where('referencia',$linea)->first();
+            Registro::where('id',$id_registro->registro)->delete();
+            return view('pagos.eliminado');
+        }
+        return view('pagos.inicio');
     }
 }

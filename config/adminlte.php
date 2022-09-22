@@ -107,7 +107,7 @@ return [
     */
 
     'preloader' => [
-        'enabled' => true,
+        'enabled' => false,
         'img' => [
             'path' => 'img/escala_logo.png',
             'alt' => 'AdminLTE Preloader Image',
@@ -298,8 +298,8 @@ return [
             'icon' => 'fas fa-fw fa-user',
         ],
         [
-            'text' => 'Liberar pago',
-            'url'  => '/home/pagado',
+            'text' => 'Registros',
+            'url'  => '/home/registros',
             'icon' => 'fas fa-fw fa-user',
         ],
     ],

@@ -88,6 +88,7 @@
     <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"></script>
     <script>
         $("#registros1").DataTable({
+            "responsive": true,
             "lengthChange": false,
             "searching": false,
             "ordering": true,

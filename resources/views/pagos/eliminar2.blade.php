@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Liberar pago')
+@section('title', 'Eliminar registro')
 
 @section('content_header')
     <h1>Congreso Escala </h1>
@@ -11,9 +11,9 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">{{ __('Liberar pago') }}</div>
-                       <div class="card-body">
-                        <form method="post" action="{{route('liberar2')}}" role="form">
+                    <div class="card-header">{{ __('Eliminar registro') }}</div>
+                    <div class="card-body">
+                        <form method="post" action="{{route('borrar')}}" role="form">
                             @csrf
                             <div class="form-group">
                                 <label for="ref">Número de referencia</label>
@@ -27,10 +27,17 @@
                                        value="{{$persona[0]->appat.' '.$persona[0]->apmat.' '.$persona[0]->nombre}}">
                             </div>
                             <div class="form-group">
-                                <label for="escuelan">Institución</label>
+                                <label for="escuela">Institución</label>
                                 <input type="text" name="escuela" id="escuela"
                                        class="form-control" readonly
                                        value="{{$persona[0]->tec}}"
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label for="correo">Correo</label>
+                                <input type="email" name="correo" id="correo"
+                                       class="form-control" readonly
+                                       value="{{$persona[0]->correo}}"
                                 >
                             </div>
                             <div class="form-group">
@@ -41,7 +48,7 @@
                                 >
                             </div>
                             <div class="form-group">
-                                <label for="continuar">¿Desea liberar el pago?</label>
+                                <label for="continuar">¿Desea eliminar el registro?</label>
                                 <div class="form-check">
                                     <input type="radio" name="continuar" id="continuar1"
                                            class="form-check-input" value="1">
@@ -62,4 +69,5 @@
         </div>
     </div>
 @stop
+
 
