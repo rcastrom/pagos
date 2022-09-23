@@ -32,10 +32,10 @@ class PDFController extends Controller
         $this->fpdf->SetXY($x,$y+24);
         $this->fpdf->Cell(115,4,'Cuenta: 13003338223',0,1,'L');
         $this->fpdf->SetXY($x,$y+30);
-        $this->fpdf->Cell(115,4,'CLABE: 044028130033382234',0,1,'L');
-        $this->fpdf->SetXY($x,$y+36);
+        //$this->fpdf->Cell(115,4,'CLABE: 044028130033382234',0,1,'L');
+        //$this->fpdf->SetXY($x,$y+36);
         $this->fpdf->Cell(115,4,"Referencia: ".$request->get('ref'),0,1,'L');
-        $this->fpdf->SetXY($x,$y+42);
+        $this->fpdf->SetXY($x,$y+36);
         $this->fpdf->Cell(115,4,"Monto a pagar: $".number_format($request->get('monto'),2,".",","),0,1,'L');
         $this->fpdf->Output();
         exit();

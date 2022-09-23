@@ -302,6 +302,16 @@ return [
             'url'  => '/home/registros',
             'icon' => 'fas fa-fw fa-user',
         ],
+        [
+            'text' => 'Items',
+            'url'  => '/home/camisetas',
+            'icon' => 'fas fa-fw fa-user',
+        ],
+        [
+            'text' => 'Importar pagos',
+            'url'  => '/home/import',
+            'icon' => 'fas fa-fw fa-file',
+        ],
     ],
 
     /*

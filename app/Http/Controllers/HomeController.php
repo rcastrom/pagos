@@ -6,8 +6,11 @@ namespace App\Http\Controllers;
 use App\Models\Registro;
 use App\Models\Escuela;
 use App\Models\Referencia;
+use App\Models\Camisa;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use App\Imports\PagosImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class HomeController extends Controller
 {
@@ -125,5 +128,52 @@ class HomeController extends Controller
             return view('pagos.eliminado');
         }
         return view('pagos.inicio');
+    }
+    public function camisetas(){
+        $ensenadas=Camisa::select('camisas.talla',DB::raw('COUNT(registros.id) AS cantidad'))->
+            leftJoin('registros','camisas.id','registros.camisa')->
+            where('registros.pagado',1)->
+            where('registros.tec',1)->
+            groupBy('camisas.talla')->
+            orderBy('talla')->
+            get();
+        $mexicalis=Camisa::select('camisas.talla',DB::raw('COUNT(registros.id) AS cantidad'))->
+            leftJoin('registros','camisas.id','registros.camisa')->
+            where('registros.pagado',1)->
+            where('registros.tec',2)->
+            groupBy('camisas.talla')->
+            orderBy('talla')->
+            get();
+        $tijuanas=Camisa::select('camisas.talla',DB::raw('COUNT(registros.id) AS cantidad'))->
+            leftJoin('registros','camisas.id','registros.camisa')->
+            where('registros.pagado',1)->
+            where('registros.tec',3)->
+            groupBy('camisas.talla')->
+            orderBy('talla')->
+            get();
+        $muleges=Camisa::select('camisas.talla',DB::raw('COUNT(registros.id) AS cantidad'))->
+            leftJoin('registros','camisas.id','registros.camisa')->
+            where('registros.pagado',1)->
+            where('registros.tec',4)->
+            groupBy('camisas.talla')->
+            orderBy('talla')->
+            get();
+        $otros=Camisa::select('camisas.talla',DB::raw('COUNT(registros.id) AS cantidad'))->
+            leftJoin('registros','camisas.id','registros.camisa')->
+            where('registros.pagado',1)->
+            where('registros.tec',5)->
+            groupBy('camisas.talla')->
+            orderBy('talla')->
+            get();
+        return view('pagos.camisas')->with(compact('ensenadas',
+            'mexicalis','tijuanas','muleges','otros'));
+    }
+    public function importForm(){
+        return view('pagos.import');
+    }
+    public function importar(Request $request){
+        $import = new PagosImport();
+        Excel::import($import, \request()->file('pagos'));
+        return view('pagos.import',['numRows'=>$import->getRowCount()]);
     }
 }

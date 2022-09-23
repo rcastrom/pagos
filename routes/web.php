@@ -30,4 +30,7 @@ Route::middleware('auth')->prefix('home')->group(function (){
         Route::post('/liberar',[HomeController::class,'pago2'])->name('liberar2');
         Route::post('/cancelar',[HomeController::class,'eliminar2'])->name('borrar');
         Route::post('/impresion',[PDFController::class,'crearPDF'])->name('imprimir');
+        Route::get('/camisetas',[HomeController::class,'camisetas']);
+        Route::get('/import',[HomeController::class,'importForm'])->name('pagos.importForm');
+        Route::post('/import',[HomeController::class,'importar'])->name('pagos.import');
     });
