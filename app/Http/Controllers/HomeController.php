@@ -187,9 +187,7 @@ class HomeController extends Controller
         foreach ($pagos as $pago){
             $referencia=$pago->referencia;
             if(Referencia::where('referencia',$referencia)->count()>0){
-               // Pago::where('referencia',$referencia)->update([
-               //     'encontrado'=>1
-               // ]);
+                Pago::where('referencia',$referencia)->update(['encontrado'=>1]);
                 $id_persona=Referencia::where('referencia',$referencia)->first();
                 $info=Registro::where('id',$id_persona->registro)->first();
                 $datos_correo = new Correo();
@@ -202,10 +200,10 @@ class HomeController extends Controller
                 Mail::to($info->correo)->send(new EnvioPagadoMailable($datos_correo));
                 if(count(Mail::failures())>0){
                     $errores[$j]=$info->correo;
-                    //Pago::where('referencia',$referencia)->update(['enviado'=>2]);
+                    Pago::where('referencia',$referencia)->update(['enviado'=>2]);
                     $j++;
                 }else{
-                    //Pago::where('referencia',$referencia)->update(['enviado'=>1]);
+                    Pago::where('referencia',$referencia)->update(['enviado'=>1]);
                     $i++;
                 }
                 Correo::where('id',$id_registrado)->delete();

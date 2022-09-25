@@ -12,23 +12,24 @@
 <body>
 <h1>Bienvenido a Congreso Escala 2022</h1>
 <h4>Hola {{$correo->nombre.' '.$correo->appat}}</h4>
-<p>El correo enviado es para informarte que tu pago ha sido registrado, por lo que te esperamos
+<p>Este correo es para informarte que tu pago ha sido registrado, por lo que te esperamos
     del 5 al 7 de octubre del año 2022 en las instalaciones del Instituto Tecnológico de Ensenada.
 </p>
 <p>Por favor, ten en cuenta lo siguiente:
 <ul>
-    <li>Todo el Congreso Escala se llevará a cabo en el polígono sur de las instalaciones del ITE.</li>
+    <li>El Congreso Escala 2022 se llevará a cabo en el polígono sur de las instalaciones del ITE.</li>
     <li>El registro se realizará el martes 4 de octubre del 2022 en el Gimnasio, en donde se te entregará tu
         comprobante del depósito (boleto).</li>
-    <li>Para cualquier posible aclaración, trae contigo el comprobante del depósito</li>
+    <li>Para cualquier aclaración, se te puede solicitar el comprobante del depósito. Es recomendable
+    que lo tengas contigo. </li>
 </ul>
-<div class="container mt-4">
+<div class="container mt-4 justify-content-center">
     <div class="card">
         <div class="card-header">
             <h3>Gafete electrónico</h3>
         </div>
         <div class="card-body">
-            {!! QrCode::size(300)->generate('https://techvblogs.com/blog/generate-qr-code-laravel-9') !!}
+            <img src="{!!$message->embedData(QrCode::format('png')->size(300)->generate($correo->referencia), 'QrCode.png', 'image/png')!!}">
         </div>
     </div>
 </div>
