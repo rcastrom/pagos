@@ -3,14 +3,18 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Pago;
 use App\Models\Registro;
 use App\Models\Escuela;
 use App\Models\Referencia;
 use App\Models\Camisa;
+use App\Models\Correo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Imports\PagosImport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Mail\EnvioPagadoMailable;
+use Illuminate\Support\Facades\Mail;
 
 class HomeController extends Controller
 {
@@ -175,5 +179,44 @@ class HomeController extends Controller
         $import = new PagosImport();
         Excel::import($import, \request()->file('pagos'));
         return view('pagos.import',['numRows'=>$import->getRowCount()]);
+    }
+    public function mandar_correos(){
+        //Quienes pagaron?
+        $pagos=Pago::where('encontrado',0)->where('enviado',0)->select('referencia')->get();
+        $i=0; $j=0; $errores=array();
+        foreach ($pagos as $pago){
+            $referencia=$pago->referencia;
+            if(Referencia::where('referencia',$referencia)->count()>0){
+               // Pago::where('referencia',$referencia)->update([
+               //     'encontrado'=>1
+               // ]);
+                $id_persona=Referencia::where('referencia',$referencia)->first();
+                $info=Registro::where('id',$id_persona->registro)->first();
+                $datos_correo = new Correo();
+                $datos_correo->appat=$info->appat;
+                $datos_correo->apmat=$info->apmat;
+                $datos_correo->nombre=$info->nombre;
+                $datos_correo->referencia=$referencia;
+                $datos_correo->save();
+                $id_registrado=$datos_correo->id;
+                Mail::to($info->correo)->send(new EnvioPagadoMailable($datos_correo));
+                if(count(Mail::failures())>0){
+                    $errores[$j]=$info->correo;
+                    //Pago::where('referencia',$referencia)->update(['enviado'=>2]);
+                    $j++;
+                }else{
+                    //Pago::where('referencia',$referencia)->update(['enviado'=>1]);
+                    $i++;
+                }
+                Correo::where('id',$id_registrado)->delete();
+            }else{
+                Pago::where('referencia',$referencia)->update([
+                    'encontrado'=>2
+                ]);
+            }
+            //Código 1 será que se localizó a quien le pertenece el pago
+            //Código 2 será que no se sabe de quién es el pago
+        }
+        return view('pagos.enviados')->with(compact('i','j','errores'));
     }
 }

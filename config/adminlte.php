@@ -312,6 +312,11 @@ return [
             'url'  => '/home/import',
             'icon' => 'fas fa-fw fa-file',
         ],
+        [
+            'text' => 'Envío de QR',
+            'url'  => '/home/liberar',
+            'icon' => 'fas fa-fw fa-file',
+        ],
     ],
 
     /*

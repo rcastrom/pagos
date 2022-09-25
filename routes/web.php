@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PDFController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,4 +34,6 @@ Route::middleware('auth')->prefix('home')->group(function (){
         Route::get('/camisetas',[HomeController::class,'camisetas']);
         Route::get('/import',[HomeController::class,'importForm'])->name('pagos.importForm');
         Route::post('/import',[HomeController::class,'importar'])->name('pagos.import');
+        Route::get('/liberar',[HomeController::class,'mandar_correos']);
     });
+
