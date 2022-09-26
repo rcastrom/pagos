@@ -197,6 +197,7 @@ class HomeController extends Controller
                 $datos_correo->referencia=$referencia;
                 $datos_correo->save();
                 $id_registrado=$datos_correo->id;
+                Registro::where('id',$id_persona->registro)->update(['pagado'=>1]);
                 Mail::to($info->correo)->send(new EnvioPagadoMailable($datos_correo));
                 if(count(Mail::failures())>0){
                     $errores[$j]=$info->correo;

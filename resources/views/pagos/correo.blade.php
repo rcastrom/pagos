@@ -10,17 +10,17 @@
     <title>Document</title>
 </head>
 <body>
-<h1>Bienvenido a Congreso Escala 2022</h1>
-<h4>Hola {{$correo->nombre.' '.$correo->appat}}</h4>
+<h1>¡Bienvenido al Congreso Escala 2022!</h1>
+<h4>Hola {{$correo->nombre.' '.$correo->appat.' '.$correo->apmat}}</h4>
 <p>Este correo es para informarte que tu pago ha sido registrado, por lo que te esperamos
-    del 5 al 7 de octubre del año 2022 en las instalaciones del Instituto Tecnológico de Ensenada.
+    del 5 al 7 de octubre del año en curso, en las instalaciones del Instituto Tecnológico de Ensenada.
 </p>
 <p>Por favor, ten en cuenta lo siguiente:
 <ul>
     <li>El Congreso Escala 2022 se llevará a cabo en el polígono sur de las instalaciones del ITE.</li>
-    <li>El registro se realizará el martes 4 de octubre del 2022 en el Gimnasio, en donde se te entregará tu
+    <li>El registro se realizará el martes 4 de octubre en el gimnasio, en donde se te entregará tu
         comprobante del depósito (boleto).</li>
-    <li>Para cualquier aclaración, se te puede solicitar el comprobante del depósito. Es recomendable
+    <li>Para cualquier aclaración, se puede solicitar el comprobante del depósito. Es recomendable
     que lo tengas contigo. </li>
 </ul>
 <div class="container mt-4 justify-content-center">
