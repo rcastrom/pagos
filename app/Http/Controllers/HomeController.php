@@ -119,7 +119,8 @@ class HomeController extends Controller
             Registro::where('id',$id_registro->registro)->update([
                 'pagado'=>1
             ]);
-            return view('pagos.liberado');
+            $hecho=$this->envio_individual($linea);
+            return view('pagos.liberado')->with(compact('hecho'));
         }
         return view('pagos.inicio');
     }
@@ -217,5 +218,25 @@ class HomeController extends Controller
             //Código 2 será que no se sabe de quién es el pago
         }
         return view('pagos.enviados')->with(compact('i','j','errores'));
+    }
+    public function envio_individual($referencia)
+    {
+        $id_persona = Referencia::where('referencia', $referencia)->first();
+        $info = Registro::where('id', $id_persona->registro)->first();
+        $datos_correo = new Correo();
+        $datos_correo->appat = $info->appat;
+        $datos_correo->apmat = $info->apmat;
+        $datos_correo->nombre = $info->nombre;
+        $datos_correo->referencia = $referencia;
+        $datos_correo->save();
+        $id_registrado = $datos_correo->id;
+        Mail::to($info->correo)->send(new EnvioPagadoMailable($datos_correo));
+        if (count(Mail::failures()) > 0) {
+            $bandera=0;
+        } else {
+            $bandera=1;
+        }
+        Correo::where('id', $id_registrado)->delete();
+        return $bandera;
     }
 }
