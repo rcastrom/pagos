@@ -183,39 +183,42 @@ class HomeController extends Controller
     }
     public function mandar_correos(){
         //Quienes pagaron?
-        $pagos=Pago::where('encontrado',0)->where('enviado',0)->select('referencia')->get();
-        $i=0; $j=0; $errores=array();
+        $pagos=Pago::where('encontrado',0)->where('enviado',0)->distinct()->get();
+        $i=0; $j=0; $errores=array();  $k=1;
         foreach ($pagos as $pago){
             $referencia=$pago->referencia;
-            if(Referencia::where('referencia',$referencia)->count()>0){
-                Pago::where('referencia',$referencia)->update(['encontrado'=>1]);
-                $id_persona=Referencia::where('referencia',$referencia)->first();
-                $info=Registro::where('id',$id_persona->registro)->first();
-                $datos_correo = new Correo();
-                $datos_correo->appat=$info->appat;
-                $datos_correo->apmat=$info->apmat;
-                $datos_correo->nombre=$info->nombre;
-                $datos_correo->referencia=$referencia;
-                $datos_correo->save();
-                $id_registrado=$datos_correo->id;
-                Registro::where('id',$id_persona->registro)->update(['pagado'=>1]);
-                Mail::to($info->correo)->send(new EnvioPagadoMailable($datos_correo));
-                if(count(Mail::failures())>0){
-                    $errores[$j]=$info->correo;
-                    Pago::where('referencia',$referencia)->update(['enviado'=>2]);
-                    $j++;
-                }else{
+            if($k<30){
+                if(Referencia::where('referencia',$referencia)->count()>0){
+                    Pago::where('referencia',$referencia)->update(['encontrado'=>1]);
+                    $id_persona=Referencia::where('referencia',$referencia)->first();
+                    $info=Registro::where('id',$id_persona->registro)->first();
+                    $datos_correo = new Correo();
+                    $datos_correo->appat=$info->appat;
+                    $datos_correo->apmat=$info->apmat;
+                    $datos_correo->nombre=$info->nombre;
+                    $datos_correo->referencia=$referencia;
+                    $datos_correo->save();
+                    $id_registrado=$datos_correo->id;
+                    Registro::where('id',$id_persona->registro)->update(['pagado'=>1]);
+                    Mail::to($info->correo)->send(new EnvioPagadoMailable($datos_correo));
+                    if(count(Mail::failures())>0){
+                        $errores[$j]=$info->correo;
+                        Pago::where('referencia',$referencia)->update(['enviado'=>2]);
+                        $j++;
+                      }else{
                     Pago::where('referencia',$referencia)->update(['enviado'=>1]);
                     $i++;
+                    }
+                    Correo::where('id',$id_registrado)->delete();
+                }else{
+                    Pago::where('referencia',$referencia)->update([
+                        'encontrado'=>2
+                    ]);
                 }
-                Correo::where('id',$id_registrado)->delete();
-            }else{
-                Pago::where('referencia',$referencia)->update([
-                    'encontrado'=>2
-                ]);
+                //Código 1 será que se localizó a quien le pertenece el pago
+                //Código 2 será que no se sabe de quién es el pago
             }
-            //Código 1 será que se localizó a quien le pertenece el pago
-            //Código 2 será que no se sabe de quién es el pago
+            $k++;
         }
         return view('pagos.enviados')->with(compact('i','j','errores'));
     }
@@ -238,5 +241,9 @@ class HomeController extends Controller
         }
         Correo::where('id', $id_registrado)->delete();
         return $bandera;
+    }
+    public function listado1(){
+        $ciudades=Escuela::select('id','tec')->orderBy('ciudad')->get();
+        return view('pagos.listado1')->with(compact('ciudades'));
     }
 }

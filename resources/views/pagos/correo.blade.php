@@ -17,9 +17,10 @@
 </p>
 <p>Por favor, ten en cuenta lo siguiente:
 <ul>
-    <li>El Congreso Escala 2022 se llevará a cabo en el polígono sur de las instalaciones del ITE.</li>
-    <li>El registro se realizará el martes 4 de octubre en el gimnasio, en donde se te entregará tu
-        comprobante del depósito (boleto).</li>
+    <li>El Congreso Escala 2022 se llevará a cabo en el gimnasio de usos múltiples del
+        polígono sur de las instalaciones del ITE del TECNM.</li>
+    <li>¿Interesado en asistir a algún taller? Verifica el siguiente
+        enlace <a href="https://forms.gle/cen5MgaKqfvo59hC7">Registro de talleres</a> </li>
     <li>Para cualquier aclaración, se puede solicitar el comprobante del depósito. Es recomendable
     que lo tengas contigo. </li>
 </ul>

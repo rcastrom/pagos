@@ -303,6 +303,11 @@ return [
             'icon' => 'fas fa-fw fa-user',
         ],
         [
+            'text' => 'Listado',
+            'url'  => '/home/listado',
+            'icon' => 'fas fa-fw fa-user',
+        ],
+        [
             'text' => 'Items',
             'url'  => '/home/camisetas',
             'icon' => 'fas fa-fw fa-user',
