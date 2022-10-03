@@ -38,6 +38,7 @@ Route::middleware('auth')->prefix('home')->group(function (){
         Route::get('/import',[HomeController::class,'importForm'])->name('pagos.importForm');
         Route::post('/import',[HomeController::class,'importar'])->name('pagos.import');
         Route::get('/liberar',[HomeController::class,'mandar_correos']);
-
+        Route::get('/alta',[HomeController::class,'alta']);
+        Route::post('/alta',[HomeController::class, 'alta2'])->name('pagos.alta');
     });
 

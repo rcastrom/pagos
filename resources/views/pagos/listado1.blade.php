@@ -34,6 +34,21 @@
                                     @endforeach
                                 </select>
                             </div>
+                            <div class="form-group">
+                                <p>Indique el tipo de impresión</p>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                    <input type="radio" name="consulta" class="form-check-input" value="1" checked> Solo
+                                        pagados
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <label for="consulta" class="form-check-label">
+                                    <input type="radio" name="consulta" class="form-check-input" value="2"> Pagados y
+                                        no pagados
+                                    </label>
+                                </div>
+                            </div>
                             <button type="submit" class="btn btn-primary">Continuar</button>
                         </form>
                     </div>

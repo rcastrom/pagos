@@ -246,4 +246,57 @@ class HomeController extends Controller
         $ciudades=Escuela::select('id','tec')->orderBy('ciudad')->get();
         return view('pagos.listado1')->with(compact('ciudades'));
     }
+    public function alta(){
+        $escuelas=Escuela::select('id','tec')->orderBy('ciudad')->get();
+        $camisetas=Camisa::select()->get();
+        return view('pagos.alta')->with(compact('escuelas','camisetas'));
+    }
+    public function alta2(Request $request){
+        request()->validate([
+            'appat'=>'required',
+            'nombre'=>'required',
+            'correo'=>'required|email',
+            'monto'=>'required|numeric'
+        ],[
+            'appat.required'=>'Debe indicar el primer apellido para realizar el registro',
+            'nombre.required'=>'Debe indicar el nombre para realizar el registro',
+            'correo.required'=>'Debe indicar el correo electrónico de la persona',
+            'correo.email'=>'El correo que señala no tiene un formato válido',
+            'monto.required'=>'Debe indicar el monto a pagar',
+            'monto.numeric'=>'Indique el monto a pagar sin símbolos'
+        ]);
+        $datos=$request->collect();
+        $registro = new Registro();
+        $registro->nombre=$datos->get('nombre');
+        $registro->appat=$datos->get('appat');
+        $registro->apmat=$datos->get('apmat');
+        $registro->correo=$datos->get('correo');
+        $registro->status=$datos->get('status');
+        $registro->tec=$datos->get('tec');
+        $registro->camisa=$datos->get('camisa');
+        $control=empty($datos->get('control'))?$datos->get('control'):null;
+        $registro->control=$control;
+        $pago=$datos->get('accion')==1?1:0;
+        $registro->pagado=$pago;
+        $registro->save();
+        $ultimo_registro=$registro->id;
+        $anio=date('Y');
+        $ref1=$anio.$datos->get('tec').$datos->get('status');
+        $txt="";
+        for($i=1;$i<=6-strlen($ultimo_registro);$i++){
+            $txt.="0";
+        }
+        $referencia=$ref1.trim($txt).$ultimo_registro;
+        $monto=$datos->get('monto');
+        if($datos->get('accion')==1){
+            $bandera=$this->envio_individual($referencia);
+            return view('pagos.liberado')->with(compact('bandera'));
+        }else{
+            $persona=$datos->get('appat').' '.$datos->get('apmat').' '.$datos->get('nombre');
+            $escuela=Escuela::where('id',$datos->get('tec'))->first();
+            $tec=$escuela->tec;
+            return view('pagos.alta2')->with(compact('referencia',
+                'monto','persona','tec'));
+        }
+    }
 }

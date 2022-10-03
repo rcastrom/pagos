@@ -298,12 +298,17 @@ return [
             'icon' => 'fas fa-fw fa-user',
         ],
         [
-            'text' => 'Registros',
+            'text' => 'Consulta',
             'url'  => '/home/registros',
             'icon' => 'fas fa-fw fa-user',
         ],
         [
-            'text' => 'Listado',
+            'text' => 'Alta registro',
+            'url'  => '/home/alta',
+            'icon' => 'fas fa-fw fa-user',
+        ],
+        [
+            'text' => 'Listado Estudiantes',
             'url'  => '/home/listado',
             'icon' => 'fas fa-fw fa-user',
         ],
