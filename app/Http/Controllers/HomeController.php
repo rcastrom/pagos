@@ -299,4 +299,16 @@ class HomeController extends Controller
                 'monto','persona','tec'));
         }
     }
+    public function listado_ponentes(){
+        $ponentes=Registro::where('pagado','1')->
+           where(function ($q){
+               $q->where('status','2')
+                   ->orWhere('status','3');
+           })->
+            orderBy('appat')->
+            orderBy('apmat')->
+            orderBy('nombre')->
+            get();
+        return view('pagos.ponentes')->with(compact('ponentes'));
+    }
 }

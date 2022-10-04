@@ -313,6 +313,11 @@ return [
             'icon' => 'fas fa-fw fa-user',
         ],
         [
+            'text' => 'Listado Ponentes',
+            'url'  => '/home/ponentes',
+            'icon' => 'fas fa-fw fa-user',
+        ],
+        [
             'text' => 'Items',
             'url'  => '/home/camisetas',
             'icon' => 'fas fa-fw fa-user',

@@ -40,5 +40,6 @@ Route::middleware('auth')->prefix('home')->group(function (){
         Route::get('/liberar',[HomeController::class,'mandar_correos']);
         Route::get('/alta',[HomeController::class,'alta']);
         Route::post('/alta',[HomeController::class, 'alta2'])->name('pagos.alta');
+        Route::get('/ponentes',[HomeController::class,'listado_ponentes']);
     });
 
