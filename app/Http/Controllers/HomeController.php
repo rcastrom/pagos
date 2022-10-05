@@ -274,13 +274,13 @@ class HomeController extends Controller
         $registro->status=$datos->get('status');
         $registro->tec=$datos->get('tec');
         $registro->camisa=$datos->get('camisa');
-        $control=empty($datos->get('control'))?$datos->get('control'):null;
+        $control=empty($datos->get('control'))?null:$datos->get('control');
         $registro->control=$control;
         $pago=$datos->get('accion')==1?1:0;
         $registro->pagado=$pago;
         $registro->save();
         $ultimo_registro=$registro->id;
-        $anio=date('Y');
+        $anio=date('y');
         $ref1=$anio.$datos->get('tec').$datos->get('status');
         $txt="";
         for($i=1;$i<=6-strlen($ultimo_registro);$i++){
@@ -288,9 +288,13 @@ class HomeController extends Controller
         }
         $referencia=$ref1.trim($txt).$ultimo_registro;
         $monto=$datos->get('monto');
+        $ref=new Referencia();
+        $ref->registro=$ultimo_registro;
+        $ref->referencia=$referencia;
+        $ref->save();
         if($datos->get('accion')==1){
-            $bandera=$this->envio_individual($referencia);
-            return view('pagos.liberado')->with(compact('bandera'));
+            $hecho=$this->envio_individual($referencia);
+            return view('pagos.liberado')->with(compact('hecho'));
         }else{
             $persona=$datos->get('appat').' '.$datos->get('apmat').' '.$datos->get('nombre');
             $escuela=Escuela::where('id',$datos->get('tec'))->first();
